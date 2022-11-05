@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LiveScoringApp</string>
+    <string name="title_screen_message">Welcome to Live Score</string>
+</resources>
