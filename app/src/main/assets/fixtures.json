@@ -1,0 +1,16 @@
+{
+  "fixtures" : [
+    {
+      "id" : 1,
+      "teams" : ["Real Madrid", "Barcelona"]
+    },
+    {
+      "id" : 2,
+      "teams" : ["Real Madrid", "Mallorca"]
+    },
+    {
+      "id" : 3,
+      "teams" : ["Valencia", "Barcelona"]
+    }
+  ]
+}
