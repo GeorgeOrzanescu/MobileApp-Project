@@ -12,7 +12,12 @@
         />
 
     <TextView
-        android:id="@+id/teams"
+        android:id="@+id/home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/away"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
