@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottomNavHome"
+        android:title="Home"
+        android:icon="@drawable/ic_home"/>
+    <item
+        android:id="@+id/bottomNavUpcoming"
+        android:title="Upcoming"
+        android:icon="@drawable/ic_future_games"/>
+
+    <item
+        android:id="@+id/bottomNavTips"
+        android:title="Tips"
+        android:icon="@drawable/ic_tips"/>
+
+</menu>
