@@ -30,11 +30,13 @@ import java.util.ArrayList;
 import eu.ase.ro.livescoringapp.classes.Match;
 import eu.ase.ro.livescoringapp.fragments.HomeFragment;
 import eu.ase.ro.livescoringapp.fragments.TipsFragment;
+import eu.ase.ro.livescoringapp.fragments.UpcomingFragment;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     TipsFragment tipsFragment = new TipsFragment();
     HomeFragment homeFragment = new HomeFragment();
+    UpcomingFragment upcomingFragment = new UpcomingFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.bottomNavHome:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutFragment,homeFragment).commit();
+                        return true;
+                    case R.id.bottomNavUpcoming:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutFragment,upcomingFragment).commit();
                         return true;
                 }
                 return true;

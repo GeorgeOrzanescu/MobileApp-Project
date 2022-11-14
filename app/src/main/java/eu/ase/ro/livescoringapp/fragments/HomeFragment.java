@@ -3,6 +3,8 @@ package eu.ase.ro.livescoringapp.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import eu.ase.ro.livescoringapp.R;
+import eu.ase.ro.livescoringapp.adapter.MatchAdapter;
 import eu.ase.ro.livescoringapp.classes.Match;
 
 /**
@@ -41,7 +44,8 @@ import eu.ase.ro.livescoringapp.classes.Match;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-    ListView listView;
+//    ListView listView;
+    RecyclerView recyclerView;
     ArrayList<Match> matches = new ArrayList<>();
 
     public HomeFragment() {
@@ -65,7 +69,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
-        listView = view.findViewById(R.id.list_view_homeFragment);
+        recyclerView = view.findViewById(R.id.recycle_view_homeFragment); // link with element in layout
         Thread jsonParser = new Thread(new JSONParser());
         jsonParser.start();
 //        try {
@@ -119,7 +123,6 @@ public class HomeFragment extends Fragment {
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
                 String line = bufferedReader.readLine();
-                Log.i("Test",line);
                 bufferedReader.close();
                 inputStreamReader.close();
                 inputStream.close();
@@ -132,8 +135,12 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void run() {
                         // UI logic
-                        ArrayAdapter<Match> adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1, matches);
-                        listView.setAdapter(adapter);;
+                        //ArrayAdapter<Match> adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1, matches);
+//                        listView.setAdapter(adapter);
+                        MatchAdapter matchAdapter = new MatchAdapter(getContext(),matches);
+                        recyclerView.setAdapter(matchAdapter);
+                        // set how the items will be displayed in recycler view
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                     }
                 });
 
@@ -148,6 +155,8 @@ public class HomeFragment extends Fragment {
 
 
     public void getMatchesFromJson(String json) {
+        matches.clear();  // remove items before another fetch
+        // TODO don't fetch if data is already present
         if(json != null){
             try {
                 JSONObject jsonObject = new JSONObject(json);
