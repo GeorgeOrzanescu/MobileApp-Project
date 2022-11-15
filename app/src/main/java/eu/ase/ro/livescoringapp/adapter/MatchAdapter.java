@@ -15,8 +15,6 @@ import eu.ase.ro.livescoringapp.R;
 import eu.ase.ro.livescoringapp.classes.Match;
 
 public class MatchAdapter extends RecyclerView.Adapter<MatchAdapter.MatchViewHolder> {
-    // elements from our layout visual
-     //TextView homeTeam ,awayTeam ;
 
     private ArrayList<Match> matchList;
     Context context;

@@ -10,19 +10,12 @@ import android.view.ViewGroup;
 
 import eu.ase.ro.livescoringapp.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UpcomingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UpcomingFragment extends Fragment {
 
     public UpcomingFragment() {
         // Required empty public constructor
     }
 
-
-    // TODO: Rename and change types and number of parameters
     public static UpcomingFragment newInstance() {
         UpcomingFragment fragment = new UpcomingFragment();
         return fragment;

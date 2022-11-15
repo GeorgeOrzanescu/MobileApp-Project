@@ -10,11 +10,7 @@ import android.view.ViewGroup;
 
 import eu.ase.ro.livescoringapp.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link TipsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class TipsFragment extends Fragment {
 
     public TipsFragment() {
