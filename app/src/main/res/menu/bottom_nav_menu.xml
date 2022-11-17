@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/bottomNavTips"
-        android:title="Tips"
-        android:icon="@drawable/ic_tips"/>
+        android:title="Chat"
+        android:icon="@drawable/ic_chat"/>
 
 </menu>

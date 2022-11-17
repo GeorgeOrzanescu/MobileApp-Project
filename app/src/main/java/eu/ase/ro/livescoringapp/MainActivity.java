@@ -9,12 +9,11 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-
-import eu.ase.ro.livescoringapp.fragments.TipsFragment;
+import eu.ase.ro.livescoringapp.fragments.ChatFragment;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
-    TipsFragment tipsFragment = new TipsFragment();
+    ChatFragment chatFragment = new ChatFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.bottomNavTips:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutFragment,tipsFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutFragment,chatFragment).commit();
                         return true;
                 }
                 return true;
