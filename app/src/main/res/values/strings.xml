@@ -4,4 +4,8 @@
     <string name="tips_for_a_smooth_experience">Tips for a smooth experience</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="chat_fragment_title">Welcome to chat area</string>
+    <string name="add_comment_user_name_hint">user name</string>
+    <string name="add_comment_hint">comment</string>
+    <string name="add_comment_category">Sport</string>
+    <string name="add_comment_button_text">Add comment</string>
 </resources>
