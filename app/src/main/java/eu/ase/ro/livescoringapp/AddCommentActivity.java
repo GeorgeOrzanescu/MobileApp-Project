@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.Date;
-
 import eu.ase.ro.livescoringapp.classes.Comment;
 
 public class AddCommentActivity extends AppCompatActivity {
@@ -69,7 +67,7 @@ public class AddCommentActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Please enter a valid username", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (message.getText() == null || userName.getText().toString().trim().length()  < 5) {
+        if (message.getText() == null || message.getText().toString().trim().length() < 5) {
             Toast.makeText(getApplicationContext(), "Please enter a valid message" ,Toast.LENGTH_SHORT).show();
             return false;
         }

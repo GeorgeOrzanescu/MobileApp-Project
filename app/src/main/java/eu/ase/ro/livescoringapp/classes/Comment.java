@@ -13,6 +13,12 @@ public class Comment implements Parcelable {
         this.comment = comment;
         this.sportCategory = sportCategory;
     }
+
+    @Override
+    public String toString() {
+        return sportCategory+ " - " + userName + " said: " + comment;
+    }
+
     // generated
     protected Comment(Parcel in) {
         userName = in.readString();
