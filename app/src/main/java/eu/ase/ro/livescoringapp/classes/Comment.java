@@ -6,15 +6,18 @@ import android.os.Parcelable;
 public class Comment implements Parcelable {
     String userName;
     String comment;
+    String sportCategory;
 
-    public Comment(String userName, String comment) {
+    public Comment(String userName, String comment, String sportCategory) {
         this.userName = userName;
         this.comment = comment;
+        this.sportCategory = sportCategory;
     }
     // generated
     protected Comment(Parcel in) {
         userName = in.readString();
         comment = in.readString();
+        sportCategory = in.readString();
     }
     // generated
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -45,6 +48,14 @@ public class Comment implements Parcelable {
         this.comment = comment;
     }
 
+    public String getSportCategory() {
+        return sportCategory;
+    }
+
+    public void setSportCategory(String sportCategory) {
+        this.sportCategory = sportCategory;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -55,5 +66,6 @@ public class Comment implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(userName);
         parcel.writeString(comment);
+        parcel.writeString(sportCategory);
     }
 }
