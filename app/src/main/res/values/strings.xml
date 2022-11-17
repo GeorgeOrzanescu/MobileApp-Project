@@ -2,4 +2,6 @@
     <string name="app_name">LiveScoringApp</string>
     <string name="title_screen_message">Welcome to Live Score</string>
     <string name="tips_for_a_smooth_experience">Tips for a smooth experience</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="chat_fragment_title">Welcome to chat area</string>
 </resources>
