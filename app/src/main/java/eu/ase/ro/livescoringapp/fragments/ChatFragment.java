@@ -25,6 +25,7 @@ import java.util.List;
 
 import eu.ase.ro.livescoringapp.AddCommentActivity;
 import eu.ase.ro.livescoringapp.R;
+import eu.ase.ro.livescoringapp.adapters.CommentAdapter;
 import eu.ase.ro.livescoringapp.classes.Comment;
 
 public class ChatFragment extends Fragment {
@@ -65,15 +66,16 @@ public class ChatFragment extends Fragment {
         addCommentButton.setOnClickListener(getAddExpenseEvent());
         listViewComments = view.findViewById(R.id.list_view_chat);
         addExpenseLauncher = registerAddExpenseLauncher();
-        // we need an ArrayAdapter for the ListView
-        ArrayAdapter<Comment> adapter = new ArrayAdapter<>(getContext().getApplicationContext(),
-                android.R.layout.simple_list_item_1, comments);
-        listViewComments.setAdapter(adapter);
+
+        // we need an ArrayAdapter or a CustomAdapter for the ListView
+        CommentAdapter commentAdapter =  new CommentAdapter(getContext().getApplicationContext(),R.layout.list_view_chat_design,comments,getLayoutInflater());
+        listViewComments.setAdapter(commentAdapter);
         return view;
     }
 
     // this is being called to notify the adapter when changes occur
     public void notifyAdapter() {
+        //!! because CommendAdapter inherits from ArrayAdapter there is no problem using it here
         ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) listViewComments.getAdapter();
         adapter.notifyDataSetChanged();
     }

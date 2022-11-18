@@ -8,4 +8,8 @@
     <string name="add_comment_hint">comment</string>
     <string name="add_comment_category">Sport</string>
     <string name="add_comment_button_text">Add comment</string>
+    <string name="description_of_chat_image">photo of chat icon</string>
+    <string name="chat_design_userName_text">userName</string>
+    <string name="chat_design_category_text">category</string>
+    <string name="chat_design_message_text">message</string>
 </resources>
