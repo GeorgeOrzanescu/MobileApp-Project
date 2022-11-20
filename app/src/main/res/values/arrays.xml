@@ -4,4 +4,8 @@
         <item>Football</item>
         <item>Swimming</item>
     </string-array>
+    <string-array name="spinner_sports_category_list">
+        <item>Football</item>
+        <item>Basketball</item>
+    </string-array>
 </resources>

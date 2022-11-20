@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,18 +21,25 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import eu.ase.ro.livescoringapp.R;
+import eu.ase.ro.livescoringapp.adapters.BasketballMatchAdapter;
 import eu.ase.ro.livescoringapp.adapters.FootballMatchAdapter;
 import eu.ase.ro.livescoringapp.async.AsyncTaskRunner;
 import eu.ase.ro.livescoringapp.async.CallbackFunction;
+import eu.ase.ro.livescoringapp.classes.BasketballMatch;
 import eu.ase.ro.livescoringapp.classes.FootballMatch;
 import eu.ase.ro.livescoringapp.network.HttpManager;
 
 public class SportsFragment extends Fragment {
-    private static final String SPORTS_URL = "https://www.jsonkeeper.com/b/LP9I";
+    private static final String SPORTS_URL = "https://www.jsonkeeper.com/b/I7SL";
+    private static final String FOOTBALL_URL_KEY = "football";
+    private static final String BASKETBALL_URL_KEY = "basketball";
+
 
     RecyclerView recyclerView;
-    ArrayList<FootballMatch> matches = new ArrayList<>();
+    ArrayList<FootballMatch> footballMatches = new ArrayList<>();
+    ArrayList<BasketballMatch> basketballMatches = new ArrayList<>();
     private final AsyncTaskRunner asyncTaskRunner = new AsyncTaskRunner();
+    private Spinner sportSelectSpinner;
 
     public SportsFragment() {
         // Required empty public constructor
@@ -54,57 +63,91 @@ public class SportsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_sports, container, false);
+
         recyclerView = view.findViewById(R.id.recycle_view_SportsFragment); // link with element in layout
-        recyclerView.setAdapter(new FootballMatchAdapter(getContext(),matches));
+        recyclerView.setAdapter(new FootballMatchAdapter(getContext(), footballMatches));
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
-        // we need an ArrayAdapter or a CustomAdapter for the Recycle View
-        getSportEventsFromNetwork();
 
+        sportSelectSpinner = view.findViewById(R.id.spinner_select_sport);
+        sportSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i == 0) {// football
+                    getSportEventsFromNetwork(FOOTBALL_URL_KEY);
+                }
+                if(i == 1){
+                    getSportEventsFromNetwork(BASKETBALL_URL_KEY);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return view;
     }
 
 
-    private void getSportEventsFromNetwork() {
+    private void getSportEventsFromNetwork(String sportKey) {
         Callable<String> asyncTask = new HttpManager(SPORTS_URL);
-        CallbackFunction<String> mainThreadTask = mainThreadTaskHttpJson();
+        CallbackFunction<String> mainThreadTask = mainThreadTaskHttpJson(sportKey);
 
         asyncTaskRunner.executeAsync(asyncTask,mainThreadTask);
 
     }
 
-    private CallbackFunction<String> mainThreadTaskHttpJson() {
+    private CallbackFunction<String> mainThreadTaskHttpJson(String sportKey) {
         return new CallbackFunction<String>() {
             @Override
             public void runResultOnUiThread(String result) {
-                getMatchesFromJson(result);
-                FootballMatchAdapter footballMatchAdapter =  new FootballMatchAdapter(getContext(),matches);
+                getMatchesFromJson(result,sportKey);
+                Log.i("Data", basketballMatches.toString());
+                if(sportKey == FOOTBALL_URL_KEY){
+                    FootballMatchAdapter footballMatchAdapter = new FootballMatchAdapter(getContext(), footballMatches);
 
-                recyclerView.setAdapter(footballMatchAdapter);
-                // set how the items will be displayed in recycler view
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                Log.i("Data",matches.toString());
+                    recyclerView.setAdapter(footballMatchAdapter);
+                    // set how the items will be displayed in recycler view
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    Log.i("Data", footballMatches.toString());
+                }
+                if(sportKey == BASKETBALL_URL_KEY){
+                    BasketballMatchAdapter basketballMatchAdapter = new BasketballMatchAdapter(getContext(), basketballMatches);
+
+                    recyclerView.setAdapter(basketballMatchAdapter);
+                    // set how the items will be displayed in recycler view
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    Log.i("Data", basketballMatches.toString());
+                }
+
             }
         };
     }
 
 
-    public void getMatchesFromJson(String json) {
-        matches.clear();  // remove items before another fetch
+    public void getMatchesFromJson(String json,String sportKey) {
+        footballMatches.clear();  // remove items before another fetch
+        basketballMatches.clear();  // remove items before another fetch
         // TODO don't fetch if data is already present
         if(json != null){
             try {
                 JSONObject jsonObject = new JSONObject(json);
 
-                JSONArray jsonArray = jsonObject.getJSONArray("matches");
+                JSONArray jsonArray = jsonObject.getJSONArray(sportKey);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject matchJson = jsonArray.getJSONObject(i);
                     Integer id = matchJson.getInt("id");
                     String homeTeam = matchJson.getString("home");
                     String awayTeam = matchJson.getString("away");
-
-                    FootballMatch newMatch = new FootballMatch(id,homeTeam,awayTeam);
-                    matches.add(newMatch);
+                    if(sportKey == FOOTBALL_URL_KEY){
+                        FootballMatch newMatch = new FootballMatch(id,homeTeam,awayTeam);
+                        footballMatches.add(newMatch);
+                    }
+                    if(sportKey == BASKETBALL_URL_KEY){
+                        BasketballMatch newMatch = new BasketballMatch(id,homeTeam,awayTeam);
+                        basketballMatches.add(newMatch);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
