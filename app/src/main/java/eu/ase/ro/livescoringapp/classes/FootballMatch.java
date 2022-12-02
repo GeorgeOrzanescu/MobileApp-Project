@@ -1,22 +1,35 @@
 package eu.ase.ro.livescoringapp.classes;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "footballMatches")   // this let's ROOM now about this class to create a table for it
 public class FootballMatch {
-    private Integer id;
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private long id;
+    @ColumnInfo(name = "homeTeam")
     private String homeTeam;
+    @ColumnInfo(name = "awayTeam")
     private String awayTeam;
 
+    // IMPORTANT: if u have multiple constructors, the one u don't want to be used by ROOM
+    // must use @Ignore on it
 
+    // ROOM needs a constructor with all parameters
     public FootballMatch(Integer id, String homeTeam, String awayTeam) {
         this.id = id;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
     }
 
-    public Integer getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(long id) {
         this.id = id;
     }
 
