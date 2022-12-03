@@ -13,6 +13,7 @@ import java.util.List;
 import eu.ase.ro.livescoringapp.classes.Comment;
 import eu.ase.ro.livescoringapp.fragments.ChatFragment;
 import eu.ase.ro.livescoringapp.fragments.SportFixturesFragment;
+import eu.ase.ro.livescoringapp.fragments.SportResultsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         // default when starting
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        currentFragment = SportFixturesFragment.newInstance();
+        currentFragment = SportResultsFragment.newInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutFragment,currentFragment).commit();
 
 
@@ -40,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.bottomNavUpcoming:
                     currentFragment = SportFixturesFragment.newInstance();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutFragment,currentFragment).commit();
+                    return true;
+                case R.id.bottomNavHome:
+                    currentFragment = SportResultsFragment.newInstance();
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayoutFragment,currentFragment).commit();
                     return true;
             }
