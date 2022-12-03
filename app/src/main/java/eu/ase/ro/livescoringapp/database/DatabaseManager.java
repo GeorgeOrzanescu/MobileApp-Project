@@ -7,13 +7,13 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import eu.ase.ro.livescoringapp.classes.FootballMatch;
+import eu.ase.ro.livescoringapp.classes.Comment;
 
 // name of the db
 // tables
 // connection
 
-@Database(entities = {FootballMatch.class },exportSchema = false,version = 1)
+@Database(entities = {Comment.class },exportSchema = false,version = 1)
 public abstract class DatabaseManager extends RoomDatabase {
     public static final String LIVE_DB = "live_db";
     private static DatabaseManager databaseManager;
@@ -34,5 +34,5 @@ public abstract class DatabaseManager extends RoomDatabase {
         return databaseManager;
     }
     // get access to the FootballMatches table
-    public abstract FootballMatchDao getFootballMatchDao();
+    public abstract CommentDao getCommentDao();
 }

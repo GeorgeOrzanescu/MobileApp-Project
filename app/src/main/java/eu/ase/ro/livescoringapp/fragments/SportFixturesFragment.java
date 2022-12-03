@@ -29,7 +29,7 @@ import eu.ase.ro.livescoringapp.classes.BasketballMatch;
 import eu.ase.ro.livescoringapp.classes.FootballMatch;
 import eu.ase.ro.livescoringapp.network.HttpManager;
 
-public class SportsFragment extends Fragment {
+public class SportFixturesFragment extends Fragment {
     private static final String SPORTS_URL = "https://www.jsonkeeper.com/b/I7SL";
     private static final String FOOTBALL_URL_KEY = "football";
     private static final String BASKETBALL_URL_KEY = "basketball";
@@ -41,13 +41,12 @@ public class SportsFragment extends Fragment {
     private final AsyncTaskRunner asyncTaskRunner = new AsyncTaskRunner();
     private Spinner sportSelectSpinner;
 
-    public SportsFragment() {
+    public SportFixturesFragment() {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static SportsFragment newInstance() {
-        SportsFragment fragment = new SportsFragment();
+    public static SportFixturesFragment newInstance() {
+        SportFixturesFragment fragment = new SportFixturesFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
