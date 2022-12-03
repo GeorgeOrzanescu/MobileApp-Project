@@ -26,7 +26,9 @@ import java.util.List;
 import eu.ase.ro.livescoringapp.AddCommentActivity;
 import eu.ase.ro.livescoringapp.R;
 import eu.ase.ro.livescoringapp.adapters.CommentAdapter;
+import eu.ase.ro.livescoringapp.async.CallbackFunction;
 import eu.ase.ro.livescoringapp.classes.Comment;
+import eu.ase.ro.livescoringapp.database.CommentService;
 
 public class ChatFragment extends Fragment {
 
@@ -36,6 +38,8 @@ public class ChatFragment extends Fragment {
     private ListView listViewComments; // ListView for showing the comments
     private List<Comment> comments = new ArrayList<>();
     ActivityResultLauncher<Intent> addExpenseLauncher;
+
+    private CommentService commentService;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -63,14 +67,31 @@ public class ChatFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_chat, container, false);
         addCommentButton = view.findViewById(R.id.button_add_comment);
-        addCommentButton.setOnClickListener(getAddExpenseEvent());
+        addCommentButton.setOnClickListener(getAddCommentEvent());
         listViewComments = view.findViewById(R.id.list_view_chat);
-        addExpenseLauncher = registerAddExpenseLauncher();
+        addExpenseLauncher = registerAddCommentLauncher();
+        commentService = new CommentService(getContext().getApplicationContext());
+
+        //get all comments from DB on load
+        commentService.getAll(getAllCommentsCallback());
 
         // we need an ArrayAdapter or a CustomAdapter for the ListView
         CommentAdapter commentAdapter =  new CommentAdapter(getContext().getApplicationContext(),R.layout.list_view_chat_design,comments,getLayoutInflater());
         listViewComments.setAdapter(commentAdapter);
         return view;
+    }
+
+    private CallbackFunction<List<Comment>> getAllCommentsCallback() {
+        return new CallbackFunction<List<Comment>>() {
+            @Override
+            public void runResultOnUiThread(List<Comment> result) {
+                    if(result != null) {
+                        comments.clear();
+                        comments.addAll(result);
+                        notifyAdapter();
+                    }
+            }
+        };
     }
 
     // this is being called to notify the adapter when changes occur
@@ -80,7 +101,7 @@ public class ChatFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private View.OnClickListener getAddExpenseEvent() {
+    private View.OnClickListener getAddCommentEvent() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,21 +111,37 @@ public class ChatFragment extends Fragment {
         };
     }
 
-    private ActivityResultLauncher<Intent> registerAddExpenseLauncher() {
+    private ActivityResultLauncher<Intent> registerAddCommentLauncher() {
 
-        ActivityResultCallback<ActivityResult> callback = getAddExpenseResultCallback();
+        ActivityResultCallback<ActivityResult> callback = getAddCommentResultCallback();
         return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), callback);
     }
 
-    private ActivityResultCallback<ActivityResult> getAddExpenseResultCallback() {
+    private ActivityResultCallback<ActivityResult> getAddCommentResultCallback() {
         return result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                 // getParcelableExtra calls the static Creator function of the Expense class
-                Comment expense = result.getData().getParcelableExtra(AddCommentActivity.MESSAGE_KEY);
-                comments.add(expense);
-                Log.i("Chat Fragment received", comments.toString());
-                // notify the adapter when ListView changes
-                notifyAdapter();
+                Comment comment = result.getData().getParcelableExtra(AddCommentActivity.MESSAGE_KEY);
+//                comments.add(comment);
+
+                // insert into DB
+                commentService.insert(comment,insertCommentCallback());
+//                Log.i("Chat Fragment received", comments.toString());
+//                // notify the adapter when ListView changes
+//                notifyAdapter();
+            }
+        };
+    }
+
+    private CallbackFunction<Comment> insertCommentCallback() {
+        return new CallbackFunction<Comment>() {
+            @Override
+            public void runResultOnUiThread(Comment result) {
+                if(result != null) {
+                    comments.add(result);
+                    Log.i("Chat Fragment received", comments.toString());
+                    notifyAdapter();
+                }
             }
         };
     }
