@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SportsFragment">
+    tools:context=".fragments.SportFixturesFragment">
 
     <TextView
         android:id="@+id/text_label_spinner"

@@ -1,10 +1,10 @@
 package eu.ase.ro.livescoringapp.classes;
 
 public class FootballMatch {
+
     private Integer id;
     private String homeTeam;
     private String awayTeam;
-
 
     public FootballMatch(Integer id, String homeTeam, String awayTeam) {
         this.id = id;
