@@ -102,7 +102,6 @@ public class SportFixturesFragment extends Fragment {
             @Override
             public void runResultOnUiThread(String result) {
                 getMatchesFromJson(result,sportKey);
-                Log.i("Data", basketballMatches.toString());
                 if(sportKey == FOOTBALL_URL_KEY){
                     FootballMatchAdapter footballMatchAdapter = new FootballMatchAdapter(getContext(), footballMatches);
 
