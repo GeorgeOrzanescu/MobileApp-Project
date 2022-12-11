@@ -45,5 +45,13 @@ public class FootballResult {
         this.awayScore = awayScore;
     }
 
-
+    @Override
+    public String toString() {
+        return "FootballResult{" +
+                "homeTeam='" + homeTeam + '\'' +
+                ", awayTeam='" + awayTeam + '\'' +
+                ", homeScore=" + homeScore +
+                ", awayScore=" + awayScore +
+                '}';
+    }
 }

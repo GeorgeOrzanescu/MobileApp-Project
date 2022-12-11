@@ -1,6 +1,7 @@
 package eu.ase.ro.livescoringapp.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,13 +40,13 @@ public class FootballResultAdapter extends RecyclerView.Adapter<FootballResultAd
         FootballResult footballResult = footballResults.get(position);
         holder.homeTeam.setText(footballResult.getHomeTeam());
         holder.awayTeam.setText(footballResult.getAwayTeam());
-        holder.homeScore.setText(footballResult.getHomeScore());
-        holder.awayScore.setText(footballResult.getAwayScore());
+        holder.homeScore.setText( String.valueOf(footballResult.getHomeScore()));
+        holder.awayScore.setText(String.valueOf(footballResult.getAwayScore()));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return footballResults.size();
     }
 
     // Need this class for the view holder
