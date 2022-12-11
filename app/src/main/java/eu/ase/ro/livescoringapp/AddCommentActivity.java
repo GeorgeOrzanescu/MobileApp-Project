@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -58,8 +59,9 @@ public class AddCommentActivity extends AppCompatActivity {
         String userName = this.userName.getText().toString();
         String message = this.message.getText().toString();
         String category = spnCategories.getSelectedItem().toString();
-
-        return new Comment(userName,message,category);
+        long category_id = spnCategories.getSelectedItemPosition();
+        Log.i("Category id", String.valueOf(category_id));
+        return new Comment(userName,message,category,category_id + 1);
     }
 
     private boolean isValid() {

@@ -27,7 +27,9 @@ import eu.ase.ro.livescoringapp.AddCommentActivity;
 import eu.ase.ro.livescoringapp.R;
 import eu.ase.ro.livescoringapp.adapters.CommentAdapter;
 import eu.ase.ro.livescoringapp.async.CallbackFunction;
+import eu.ase.ro.livescoringapp.classes.CategoryWithComments;
 import eu.ase.ro.livescoringapp.classes.Comment;
+import eu.ase.ro.livescoringapp.database.CategoryWithCommentsService;
 import eu.ase.ro.livescoringapp.database.CommentService;
 
 public class ChatFragment extends Fragment {
@@ -40,6 +42,7 @@ public class ChatFragment extends Fragment {
     ActivityResultLauncher<Intent> addExpenseLauncher;
 
     private CommentService commentService;
+    private CategoryWithCommentsService categoryWithCommentsService;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -71,9 +74,11 @@ public class ChatFragment extends Fragment {
         listViewComments = view.findViewById(R.id.list_view_chat);
         addExpenseLauncher = registerAddCommentLauncher();
         commentService = new CommentService(getContext().getApplicationContext());
+        categoryWithCommentsService = new CategoryWithCommentsService(getContext().getApplicationContext());
 
         //get all comments from DB on load
-        commentService.getAll(getAllCommentsCallback());
+        //commentService.getAll(getAllCommentsCallback());
+        categoryWithCommentsService.getAll(getAllCategoryCommentsCallback());
 
         // we need an ArrayAdapter or a CustomAdapter for the ListView
         CommentAdapter commentAdapter =  new CommentAdapter(getContext().getApplicationContext(),R.layout.list_view_chat_design,comments,getLayoutInflater());
@@ -90,6 +95,17 @@ public class ChatFragment extends Fragment {
                         comments.addAll(result);
                         notifyAdapter();
                     }
+            }
+        };
+    }
+
+    private CallbackFunction<List<CategoryWithComments>> getAllCategoryCommentsCallback() {
+        return new CallbackFunction<List<CategoryWithComments>>() {
+            @Override
+            public void runResultOnUiThread(List<CategoryWithComments> result) {
+                if(result != null) {
+                    Log.i("testing",result.get(0).commentList.get(0).toString());
+                }
             }
         };
     }
@@ -122,13 +138,10 @@ public class ChatFragment extends Fragment {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                 // getParcelableExtra calls the static Creator function of the Expense class
                 Comment comment = result.getData().getParcelableExtra(AddCommentActivity.MESSAGE_KEY);
-//                comments.add(comment);
+                //comments.add(comment);
 
                 // insert into DB
                 commentService.insert(comment,insertCommentCallback());
-//                Log.i("Chat Fragment received", comments.toString());
-//                // notify the adapter when ListView changes
-//                notifyAdapter();
             }
         };
     }

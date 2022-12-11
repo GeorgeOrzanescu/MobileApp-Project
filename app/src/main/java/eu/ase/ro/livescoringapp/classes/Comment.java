@@ -15,6 +15,9 @@ public class Comment implements Parcelable {
     @ColumnInfo(name = "id")
     private long id;
 
+    @ColumnInfo(name = "category_id")
+    private long category_id;
+
     @ColumnInfo(name = "userName")
     String userName;
 
@@ -29,17 +32,19 @@ public class Comment implements Parcelable {
 
     // ROOM needs a constructor with all parameters
     @Ignore
-    public Comment(String userName, String comment, String sportCategory) {
+    public Comment(String userName, String comment, String sportCategory, long category_id) {
         this.userName = userName;
         this.comment = comment;
         this.sportCategory = sportCategory;
+        this.category_id = category_id;
     }
 
-    public Comment(long id, String userName, String comment, String sportCategory) {
+    public Comment(long id, String userName, String comment, String sportCategory,long category_id) {
         this.id = id;
         this.userName = userName;
         this.comment = comment;
         this.sportCategory = sportCategory;
+        this.category_id = category_id;
     }
 
     @Override
@@ -52,6 +57,7 @@ public class Comment implements Parcelable {
         userName = in.readString();
         comment = in.readString();
         sportCategory = in.readString();
+        category_id = in.readLong();
     }
     // generated
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -65,6 +71,14 @@ public class Comment implements Parcelable {
             return new Comment[size];
         }
     };
+
+    public long getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(long category_id) {
+        this.category_id = category_id;
+    }
 
     public long getId() {
         return id;
@@ -109,5 +123,6 @@ public class Comment implements Parcelable {
         parcel.writeString(userName);
         parcel.writeString(comment);
         parcel.writeString(sportCategory);
+        parcel.writeLong(category_id);
     }
 }

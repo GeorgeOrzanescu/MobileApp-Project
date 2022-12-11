@@ -15,6 +15,6 @@ public interface CommentDao {
     @Insert
     long insert(Comment comment);
 
-    @Query("select * from comments")
+    @Query("SELECT * FROM comments")
     List<Comment> getAll();
 }
