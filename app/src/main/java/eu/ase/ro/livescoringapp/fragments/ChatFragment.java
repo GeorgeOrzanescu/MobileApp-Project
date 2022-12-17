@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -37,9 +38,10 @@ public class ChatFragment extends Fragment {
     private static final String MESSAGE_KEY = "message";
 
     FloatingActionButton addCommentButton;
+    private RadioGroup chatCategory;
     private ListView listViewComments; // ListView for showing the comments
     private List<Comment> comments = new ArrayList<>();
-    ActivityResultLauncher<Intent> addExpenseLauncher;
+    ActivityResultLauncher<Intent> addCommentLauncher;
 
     private CommentService commentService;
     private CategoryWithCommentsService categoryWithCommentsService;
@@ -72,13 +74,28 @@ public class ChatFragment extends Fragment {
         addCommentButton = view.findViewById(R.id.button_add_comment);
         addCommentButton.setOnClickListener(getAddCommentEvent());
         listViewComments = view.findViewById(R.id.list_view_chat);
-        addExpenseLauncher = registerAddCommentLauncher();
+        chatCategory = view.findViewById(R.id.radio_group_chat);
+        chatCategory.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                if(radioGroup.getCheckedRadioButtonId() == R.id.radio_btn_chat_football) {
+                    Log.i("radio group id", "football");
+                    categoryWithCommentsService.getAll(getAllCategoryCommentsCallback("football"));
+                }
+                else{
+                    Log.i("radio group id", "basketball");
+                    categoryWithCommentsService.getAll(getAllCategoryCommentsCallback("basketball"));
+                }
+            }
+        });
+        addCommentLauncher = registerAddCommentLauncher();
         commentService = new CommentService(getContext().getApplicationContext());
         categoryWithCommentsService = new CategoryWithCommentsService(getContext().getApplicationContext());
 
         //get all comments from DB on load
         //commentService.getAll(getAllCommentsCallback());
-        categoryWithCommentsService.getAll(getAllCategoryCommentsCallback());
+        categoryWithCommentsService.getAll(getAllCategoryCommentsCallback("football"));
 
         // we need an ArrayAdapter or a CustomAdapter for the ListView
         CommentAdapter commentAdapter =  new CommentAdapter(getContext().getApplicationContext(),R.layout.list_view_chat_design,comments,getLayoutInflater());
@@ -99,12 +116,21 @@ public class ChatFragment extends Fragment {
         };
     }
 
-    private CallbackFunction<List<CategoryWithComments>> getAllCategoryCommentsCallback() {
+    private CallbackFunction<List<CategoryWithComments>> getAllCategoryCommentsCallback(String  chatCategory) {
         return new CallbackFunction<List<CategoryWithComments>>() {
             @Override
             public void runResultOnUiThread(List<CategoryWithComments> result) {
                 if(result != null) {
-                    Log.i("testing",result.get(0).commentList.get(0).toString());
+                    if(chatCategory == "football"){
+                        comments.clear();
+                        comments.addAll(result.get(0).commentList);
+                        notifyAdapter();
+                    }
+                    else {
+                        comments.clear();
+                        comments.addAll(result.get(1).commentList);
+                        notifyAdapter();
+                    }
                 }
             }
         };
@@ -122,7 +148,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext().getApplicationContext(), AddCommentActivity.class);
-                addExpenseLauncher.launch(intent);
+                addCommentLauncher.launch(intent);
             }
         };
     }
@@ -136,9 +162,8 @@ public class ChatFragment extends Fragment {
     private ActivityResultCallback<ActivityResult> getAddCommentResultCallback() {
         return result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                // getParcelableExtra calls the static Creator function of the Expense class
+                // getParcelableExtra calls the static Creator function of the Comment class
                 Comment comment = result.getData().getParcelableExtra(AddCommentActivity.MESSAGE_KEY);
-                //comments.add(comment);
 
                 // insert into DB
                 commentService.insert(comment,insertCommentCallback());

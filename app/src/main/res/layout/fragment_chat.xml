@@ -17,15 +17,60 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
+    <RadioGroup
+        android:id="@+id/radio_group_chat"
+
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_chat_title"
+
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal"
+        android:weightSum="2"
+
+        >
+
+        <RadioButton
+            android:id="@+id/radio_btn_chat_football"
+            android:checked="true"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"
+
+            android:text="Football chat"
+            />
+
+        <RadioButton
+            android:id="@+id/radio_btn_chat_basketball"
+
+            android:layout_width="0dp"
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"
+            android:text="Basketball chat"
+            />
+
+    </RadioGroup>
+
     <ListView
         android:id="@+id/list_view_chat"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/fab"
+        app:layout_constraintBottom_toTopOf="@+id/button_add_comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_chat_title" />
+        app:layout_constraintTop_toBottomOf="@+id/radio_group_chat" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_add_comment"
@@ -42,5 +87,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_dialog_email" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
