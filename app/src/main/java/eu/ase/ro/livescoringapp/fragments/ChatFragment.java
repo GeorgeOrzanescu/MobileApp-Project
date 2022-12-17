@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -26,16 +27,24 @@ import java.util.List;
 import eu.ase.ro.livescoringapp.AddCommentActivity;
 import eu.ase.ro.livescoringapp.R;
 import eu.ase.ro.livescoringapp.adapters.CommentAdapter;
+import eu.ase.ro.livescoringapp.async.CallbackFunction;
+import eu.ase.ro.livescoringapp.classes.CategoryWithComments;
 import eu.ase.ro.livescoringapp.classes.Comment;
+import eu.ase.ro.livescoringapp.database.CategoryWithCommentsService;
+import eu.ase.ro.livescoringapp.database.CommentService;
 
 public class ChatFragment extends Fragment {
 
     private static final String MESSAGE_KEY = "message";
 
     FloatingActionButton addCommentButton;
+    private RadioGroup chatCategory;
     private ListView listViewComments; // ListView for showing the comments
     private List<Comment> comments = new ArrayList<>();
-    ActivityResultLauncher<Intent> addExpenseLauncher;
+    ActivityResultLauncher<Intent> addCommentLauncher;
+
+    private CommentService commentService;
+    private CategoryWithCommentsService categoryWithCommentsService;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -63,14 +72,68 @@ public class ChatFragment extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_chat, container, false);
         addCommentButton = view.findViewById(R.id.button_add_comment);
-        addCommentButton.setOnClickListener(getAddExpenseEvent());
+        addCommentButton.setOnClickListener(getAddCommentEvent());
         listViewComments = view.findViewById(R.id.list_view_chat);
-        addExpenseLauncher = registerAddExpenseLauncher();
+        chatCategory = view.findViewById(R.id.radio_group_chat);
+        chatCategory.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                if(radioGroup.getCheckedRadioButtonId() == R.id.radio_btn_chat_football) {
+                    Log.i("radio group id", "football");
+                    categoryWithCommentsService.getAll(getAllCategoryCommentsCallback("football"));
+                }
+                else{
+                    Log.i("radio group id", "basketball");
+                    categoryWithCommentsService.getAll(getAllCategoryCommentsCallback("basketball"));
+                }
+            }
+        });
+        addCommentLauncher = registerAddCommentLauncher();
+        commentService = new CommentService(getContext().getApplicationContext());
+        categoryWithCommentsService = new CategoryWithCommentsService(getContext().getApplicationContext());
+
+        //get all comments from DB on load
+        //commentService.getAll(getAllCommentsCallback());
+        categoryWithCommentsService.getAll(getAllCategoryCommentsCallback("football"));
 
         // we need an ArrayAdapter or a CustomAdapter for the ListView
         CommentAdapter commentAdapter =  new CommentAdapter(getContext().getApplicationContext(),R.layout.list_view_chat_design,comments,getLayoutInflater());
         listViewComments.setAdapter(commentAdapter);
         return view;
+    }
+
+    private CallbackFunction<List<Comment>> getAllCommentsCallback() {
+        return new CallbackFunction<List<Comment>>() {
+            @Override
+            public void runResultOnUiThread(List<Comment> result) {
+                    if(result != null) {
+                        comments.clear();
+                        comments.addAll(result);
+                        notifyAdapter();
+                    }
+            }
+        };
+    }
+
+    private CallbackFunction<List<CategoryWithComments>> getAllCategoryCommentsCallback(String  chatCategory) {
+        return new CallbackFunction<List<CategoryWithComments>>() {
+            @Override
+            public void runResultOnUiThread(List<CategoryWithComments> result) {
+                if(result != null) {
+                    if(chatCategory == "football"){
+                        comments.clear();
+                        comments.addAll(result.get(0).commentList);
+                        notifyAdapter();
+                    }
+                    else {
+                        comments.clear();
+                        comments.addAll(result.get(1).commentList);
+                        notifyAdapter();
+                    }
+                }
+            }
+        };
     }
 
     // this is being called to notify the adapter when changes occur
@@ -80,31 +143,43 @@ public class ChatFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private View.OnClickListener getAddExpenseEvent() {
+    private View.OnClickListener getAddCommentEvent() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext().getApplicationContext(), AddCommentActivity.class);
-                addExpenseLauncher.launch(intent);
+                addCommentLauncher.launch(intent);
             }
         };
     }
 
-    private ActivityResultLauncher<Intent> registerAddExpenseLauncher() {
+    private ActivityResultLauncher<Intent> registerAddCommentLauncher() {
 
-        ActivityResultCallback<ActivityResult> callback = getAddExpenseResultCallback();
+        ActivityResultCallback<ActivityResult> callback = getAddCommentResultCallback();
         return registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), callback);
     }
 
-    private ActivityResultCallback<ActivityResult> getAddExpenseResultCallback() {
+    private ActivityResultCallback<ActivityResult> getAddCommentResultCallback() {
         return result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                // getParcelableExtra calls the static Creator function of the Expense class
-                Comment expense = result.getData().getParcelableExtra(AddCommentActivity.MESSAGE_KEY);
-                comments.add(expense);
-                Log.i("Chat Fragment received", comments.toString());
-                // notify the adapter when ListView changes
-                notifyAdapter();
+                // getParcelableExtra calls the static Creator function of the Comment class
+                Comment comment = result.getData().getParcelableExtra(AddCommentActivity.MESSAGE_KEY);
+
+                // insert into DB
+                commentService.insert(comment,insertCommentCallback());
+            }
+        };
+    }
+
+    private CallbackFunction<Comment> insertCommentCallback() {
+        return new CallbackFunction<Comment>() {
+            @Override
+            public void runResultOnUiThread(Comment result) {
+                if(result != null) {
+                    comments.add(result);
+                    Log.i("Chat Fragment received", comments.toString());
+                    notifyAdapter();
+                }
             }
         };
     }

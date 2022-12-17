@@ -2,6 +2,14 @@
 <resources>
     <string-array name="add_comment_categories">
         <item>Football</item>
-        <item>Swimming</item>
+        <item>Basketball</item>
+    </string-array>
+    <string-array name="spinner_sports_category_list">
+        <item>Football</item>
+        <item>Basketball</item>
+    </string-array>
+    <string-array name="spinner_sport_results_category_list">
+        <item>Bundesliga</item>
+        <item>Premier League</item>
     </string-array>
 </resources>
