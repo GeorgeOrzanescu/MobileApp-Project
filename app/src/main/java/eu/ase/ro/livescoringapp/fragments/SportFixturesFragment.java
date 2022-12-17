@@ -30,7 +30,7 @@ import eu.ase.ro.livescoringapp.classes.FootballMatch;
 import eu.ase.ro.livescoringapp.network.HttpManager;
 
 public class SportFixturesFragment extends Fragment {
-    private static final String SPORTS_URL = "https://www.jsonkeeper.com/b/I7SL";
+    private static final String SPORTS_URL = "https://api.npoint.io/e8ee44e671a077b556ce";
     private static final String FOOTBALL_URL_KEY = "football";
     private static final String BASKETBALL_URL_KEY = "basketball";
 
@@ -138,12 +138,15 @@ public class SportFixturesFragment extends Fragment {
                     Integer id = matchJson.getInt("id");
                     String homeTeam = matchJson.getString("home");
                     String awayTeam = matchJson.getString("away");
+                    JSONObject metaObject = matchJson.getJSONObject("metadata");
+                    String date = metaObject.getString("date");
+                    String favourite = metaObject.getString("favourite");
                     if(sportKey == FOOTBALL_URL_KEY){
-                        FootballMatch newMatch = new FootballMatch(id,homeTeam,awayTeam);
+                        FootballMatch newMatch = new FootballMatch(id,homeTeam,awayTeam,date,favourite);
                         footballMatches.add(newMatch);
                     }
                     if(sportKey == BASKETBALL_URL_KEY){
-                        BasketballMatch newMatch = new BasketballMatch(id,homeTeam,awayTeam);
+                        BasketballMatch newMatch = new BasketballMatch(id,homeTeam,awayTeam,date,favourite);
                         basketballMatches.add(newMatch);
                     }
                 }
