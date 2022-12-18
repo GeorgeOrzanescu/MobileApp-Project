@@ -49,4 +49,21 @@ public class CommentService {
 
         asyncTaskRunner.executeAsync(getAllOperation,activityThread);
     }
+
+    public void delete(Comment comment, CallbackFunction<Integer> activityThread) {
+        Callable<Integer> deleteOperation = new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
+                // here the insert operation in db happens ( another thread )
+                if(comment == null || comment.getId() < 0) {
+                    return null;
+                }
+                int numberOfItemsDeleted = commentDao.delete(comment);
+
+                return numberOfItemsDeleted;
+            }
+        };
+
+        asyncTaskRunner.executeAsync(deleteOperation,activityThread);
+    }
 }

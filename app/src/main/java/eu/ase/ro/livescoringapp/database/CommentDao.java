@@ -1,6 +1,7 @@
 package eu.ase.ro.livescoringapp.database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -17,4 +18,7 @@ public interface CommentDao {
 
     @Query("SELECT * FROM comments")
     List<Comment> getAll();
+
+    @Delete
+    int delete(Comment comment);
 }
