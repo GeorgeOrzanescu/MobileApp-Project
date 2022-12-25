@@ -47,19 +47,16 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 
     private void addCategoryToChat(View view, String sportCategory) {
         TextView category = view.findViewById(R.id.category_chat_design);
-        //TODO add min validation
         category.setText(sportCategory);
     }
 
     private void addMessageToChat(View view, String comment) {
         TextView messageText = view.findViewById(R.id.message_chat_design);
-        //TODO add min validation
         messageText.setText(comment);
     }
 
     private void addUserNameToChat(View view, String userName) {
         TextView userNameTxt = view.findViewById(R.id.userName_chat_design);
-        //TODO add min validation
         userNameTxt.setText(userName);
     }
 }

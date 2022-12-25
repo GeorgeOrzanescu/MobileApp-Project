@@ -2,6 +2,8 @@ package eu.ase.ro.livescoringapp.fragments;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RadioGroup;
@@ -39,7 +42,7 @@ public class ChatFragment extends Fragment {
 
     FloatingActionButton addCommentButton;
     private RadioGroup chatCategory;
-    private ListView listViewComments; // ListView for showing the comments
+    private ListView listViewComments;
     private List<Comment> comments = new ArrayList<>();
     ActivityResultLauncher<Intent> addCommentLauncher;
 
@@ -75,6 +78,30 @@ public class ChatFragment extends Fragment {
         addCommentButton.setOnClickListener(getAddCommentEvent());
         listViewComments = view.findViewById(R.id.list_view_chat);
         chatCategory = view.findViewById(R.id.radio_group_chat);
+
+        // showing a delete chat message popup
+        listViewComments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // use this to get the comment from the List
+                int commentIndex = i;
+                Comment selectedComment = comments.get(commentIndex);
+
+                new AlertDialog.Builder(getContext()).setTitle("Are you sure?")
+                        .setIcon(R.drawable.ic_delete)
+                        .setMessage("Do you want to remove this message")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                commentService.delete(selectedComment,deleteCommentCallback(commentIndex));
+                            }
+                        })
+                        .show();
+
+                return false;
+            };
+        });
+
         chatCategory.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -89,15 +116,13 @@ public class ChatFragment extends Fragment {
                 }
             }
         });
+
         addCommentLauncher = registerAddCommentLauncher();
         commentService = new CommentService(getContext().getApplicationContext());
         categoryWithCommentsService = new CategoryWithCommentsService(getContext().getApplicationContext());
 
-        //get all comments from DB on load
-        //commentService.getAll(getAllCommentsCallback());
         categoryWithCommentsService.getAll(getAllCategoryCommentsCallback("football"));
 
-        // we need an ArrayAdapter or a CustomAdapter for the ListView
         CommentAdapter commentAdapter =  new CommentAdapter(getContext().getApplicationContext(),R.layout.list_view_chat_design,comments,getLayoutInflater());
         listViewComments.setAdapter(commentAdapter);
         return view;
@@ -138,7 +163,7 @@ public class ChatFragment extends Fragment {
 
     // this is being called to notify the adapter when changes occur
     public void notifyAdapter() {
-        //!! because CommendAdapter inherits from ArrayAdapter there is no problem using it here
+        //!! because CommentAdapter inherits from ArrayAdapter there is no problem using it here
         ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) listViewComments.getAdapter();
         adapter.notifyDataSetChanged();
     }
@@ -165,7 +190,6 @@ public class ChatFragment extends Fragment {
                 // getParcelableExtra calls the static Creator function of the Comment class
                 Comment comment = result.getData().getParcelableExtra(AddCommentActivity.MESSAGE_KEY);
 
-                // insert into DB
                 commentService.insert(comment,insertCommentCallback());
             }
         };
@@ -178,6 +202,19 @@ public class ChatFragment extends Fragment {
                 if(result != null) {
                     comments.add(result);
                     Log.i("Chat Fragment received", comments.toString());
+                    notifyAdapter();
+                }
+            }
+        };
+    }
+
+    private CallbackFunction<Integer> deleteCommentCallback(int commentIndex) {
+        return new CallbackFunction<Integer>() {
+            @Override
+            public void runResultOnUiThread(Integer result) {
+                if(result == 1) {
+                    Log.i("Comment removed" , "1 comment removed");
+                    comments.remove(commentIndex);
                     notifyAdapter();
                 }
             }

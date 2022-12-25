@@ -12,10 +12,6 @@ import java.sql.Array;
 import eu.ase.ro.livescoringapp.classes.Comment;
 import eu.ase.ro.livescoringapp.classes.CommentCategory;
 
-// name of the db
-// tables
-// connection
-
 @Database(entities = {Comment.class,CommentCategory.class},exportSchema = false,version = 2)
 public abstract class DatabaseManager extends RoomDatabase {
     public static final String LIVE_DB = "live_db";
@@ -28,15 +24,14 @@ public abstract class DatabaseManager extends RoomDatabase {
                 // the second one must check again
                 if(databaseManager == null) {
                     databaseManager = Room.databaseBuilder(context,DatabaseManager.class,LIVE_DB)
-                            .fallbackToDestructiveMigration() // if we change a column type this will try to convert
-                            // and if not successful remove the entry
+                            .fallbackToDestructiveMigration() // if we change a column type this will try to convert and if not successful remove the entry
                             .build();
                 }
             }
         }
         return databaseManager;
     }
-    // get access to the FootballMatches table
+
     public abstract CommentDao getCommentDao();
 
     public abstract CommentCategoryDao getCommentCategoryDao();

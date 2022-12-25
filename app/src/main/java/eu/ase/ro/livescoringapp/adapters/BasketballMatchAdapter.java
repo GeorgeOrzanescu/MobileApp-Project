@@ -26,7 +26,6 @@ public class BasketballMatchAdapter extends RecyclerView.Adapter<BasketballMatch
     @NonNull
     @Override
     public BasketballMatchAdapter.MatchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // link with the layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.football_row_design,parent,false); // link the layout
 
@@ -39,6 +38,8 @@ public class BasketballMatchAdapter extends RecyclerView.Adapter<BasketballMatch
         BasketballMatch basketballMatch = basketballMatches.get(position);
         holder.homeTeam.setText(basketballMatch.getHomeTeam());
         holder.awayTeam.setText(basketballMatch.getAwayTeam());
+        holder.date.setText(basketballMatch.getDate());
+        holder.favourite.setText(basketballMatch.getFavourite());
     }
 
     @Override
@@ -49,11 +50,13 @@ public class BasketballMatchAdapter extends RecyclerView.Adapter<BasketballMatch
     // Need this class for the view holder
     public class MatchViewHolder extends RecyclerView.ViewHolder {
         // elements from our layout visual
-        TextView homeTeam ,awayTeam ;
-        public MatchViewHolder(@NonNull View itemView) { // itemView is the row in an recycle view
+        TextView homeTeam ,awayTeam,date,favourite ;
+        public MatchViewHolder(@NonNull View itemView) {
             super(itemView);
             homeTeam = itemView.findViewById(R.id.homeTeam);
             awayTeam = itemView.findViewById(R.id.awayTeam);
+            date = itemView.findViewById(R.id.match_date);
+            favourite = itemView.findViewById(R.id.favourite);
         }
     }
 }

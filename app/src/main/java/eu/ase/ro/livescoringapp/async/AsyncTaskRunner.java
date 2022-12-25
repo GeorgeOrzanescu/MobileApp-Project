@@ -11,8 +11,7 @@ import java.util.concurrent.Executors;
 public class AsyncTaskRunner {
     // newCachedThreadPool creates an executor that knows how many threads we can run
     private final Executor executor = Executors.newCachedThreadPool();
-    // Looper gets a reference of the main thread and checks if it's ok to send data
-    // to main thread
+    // Looper gets a reference of the main thread and checks if it's ok to send data to main thread
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     public <T> void executeAsync(Callable<T> asyncTask,CallbackFunction<T> mainThreadTask) {

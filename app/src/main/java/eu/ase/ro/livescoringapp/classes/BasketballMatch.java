@@ -4,12 +4,17 @@ public class BasketballMatch {
     private Integer id;
     private String homeTeam;
     private String awayTeam;
+    private String date;
+    private String favourite;
 
+    private String favouriteAppend = "Favourite is : ";
 
-    public BasketballMatch(Integer id, String homeTeam, String awayTeam) {
+    public BasketballMatch(Integer id, String homeTeam, String awayTeam, String date, String favourite) {
         this.id = id;
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
+        this.date = date;
+        this.setFavourite(favourite);
     }
 
     public Integer getId() {
@@ -36,8 +41,30 @@ public class BasketballMatch {
         this.awayTeam = awayTeam;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(String favourite) {
+        this.favourite = this.favouriteAppend + favourite;
+    }
+
     @Override
     public String toString() {
-        return "Match: " + id + " " + getHomeTeam() + " : " + getAwayTeam();
+        return "BasketballMatch{" +
+                "id=" + id +
+                ", homeTeam='" + homeTeam + '\'' +
+                ", awayTeam='" + awayTeam + '\'' +
+                ", date='" + date + '\'' +
+                ", favourite='" + favourite + '\'' +
+                '}';
     }
 }

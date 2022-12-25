@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 import eu.ase.ro.livescoringapp.async.AsyncTaskRunner;
 import eu.ase.ro.livescoringapp.async.CallbackFunction;
 import eu.ase.ro.livescoringapp.classes.CategoryWithComments;
+import eu.ase.ro.livescoringapp.classes.CommentCategory;
 
 public class CategoryWithCommentsService {
 
@@ -29,4 +30,23 @@ public class CategoryWithCommentsService {
 
         asyncTaskRunner.executeAsync(getAllOperation,activityThread);
     }
+
+    public void insert(CommentCategory commentCategory, CallbackFunction<CommentCategory> activityThread) {
+        Callable<CommentCategory> insertOperation = new Callable<CommentCategory>() {
+            @Override
+            public CommentCategory call() throws Exception {
+                if(commentCategory == null) {
+                    return null;
+                }
+                long id = commentCategoryDao.insert(commentCategory);
+                if(id < 0) {
+                    return null;
+                }
+                commentCategory.setComment_category_id(id);
+                return commentCategory;
+            }
+        };
+        asyncTaskRunner.executeAsync(insertOperation,activityThread);
+    }
+
 }

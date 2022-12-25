@@ -47,7 +47,7 @@
 
             android:layout_height="wrap_content"
 
-            android:text="Football chat"
+            android:text="@string/football_chat"
             />
 
         <RadioButton
@@ -57,7 +57,7 @@
             android:layout_weight="1"
 
             android:layout_height="wrap_content"
-            android:text="Basketball chat"
+            android:text="@string/basketball_chat"
             />
 
     </RadioGroup>
