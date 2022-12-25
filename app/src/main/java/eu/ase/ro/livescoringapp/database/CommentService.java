@@ -54,7 +54,6 @@ public class CommentService {
         Callable<Integer> deleteOperation = new Callable<Integer>() {
             @Override
             public Integer call() throws Exception {
-                // here the insert operation in db happens ( another thread )
                 if(comment == null || comment.getId() < 0) {
                     return null;
                 }

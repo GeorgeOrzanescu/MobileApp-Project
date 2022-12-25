@@ -42,7 +42,7 @@ public class ChatFragment extends Fragment {
 
     FloatingActionButton addCommentButton;
     private RadioGroup chatCategory;
-    private ListView listViewComments; // ListView for showing the comments
+    private ListView listViewComments;
     private List<Comment> comments = new ArrayList<>();
     ActivityResultLauncher<Intent> addCommentLauncher;
 
@@ -121,11 +121,8 @@ public class ChatFragment extends Fragment {
         commentService = new CommentService(getContext().getApplicationContext());
         categoryWithCommentsService = new CategoryWithCommentsService(getContext().getApplicationContext());
 
-        //get all comments from DB on load
-        //commentService.getAll(getAllCommentsCallback());
         categoryWithCommentsService.getAll(getAllCategoryCommentsCallback("football"));
 
-        // we need an ArrayAdapter or a CustomAdapter for the ListView
         CommentAdapter commentAdapter =  new CommentAdapter(getContext().getApplicationContext(),R.layout.list_view_chat_design,comments,getLayoutInflater());
         listViewComments.setAdapter(commentAdapter);
         return view;
@@ -166,7 +163,7 @@ public class ChatFragment extends Fragment {
 
     // this is being called to notify the adapter when changes occur
     public void notifyAdapter() {
-        //!! because CommendAdapter inherits from ArrayAdapter there is no problem using it here
+        //!! because CommentAdapter inherits from ArrayAdapter there is no problem using it here
         ArrayAdapter<Comment> adapter = (ArrayAdapter<Comment>) listViewComments.getAdapter();
         adapter.notifyDataSetChanged();
     }
@@ -193,7 +190,6 @@ public class ChatFragment extends Fragment {
                 // getParcelableExtra calls the static Creator function of the Comment class
                 Comment comment = result.getData().getParcelableExtra(AddCommentActivity.MESSAGE_KEY);
 
-                // insert into DB
                 commentService.insert(comment,insertCommentCallback());
             }
         };

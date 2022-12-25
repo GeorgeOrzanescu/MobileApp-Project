@@ -47,7 +47,7 @@ public class AddCommentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isValid()) {
                     Comment comment = createFromInputs();
-                    intent.putExtra(MESSAGE_KEY, comment); // here android automatically writes to comment Parcel file
+                    intent.putExtra(MESSAGE_KEY, comment);
                     setResult(RESULT_OK, intent);
                     finish();
                 }

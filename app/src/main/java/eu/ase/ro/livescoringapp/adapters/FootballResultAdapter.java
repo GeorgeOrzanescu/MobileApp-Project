@@ -54,7 +54,7 @@ public class FootballResultAdapter extends RecyclerView.Adapter<FootballResultAd
         // elements from our layout visual
         TextView homeTeam, awayTeam, homeScore, awayScore;
 
-        public FootballResultViewHolder(@NonNull View itemView) { // itemView is the row in an recycle view
+        public FootballResultViewHolder(@NonNull View itemView) {
             super(itemView);
             homeTeam = itemView.findViewById(R.id.result_homeTeam);
             awayTeam = itemView.findViewById(R.id.result_awayTeam);

@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.Callable;
 
 import eu.ase.ro.livescoringapp.R;
@@ -28,7 +29,7 @@ import eu.ase.ro.livescoringapp.classes.FootballResult;
 import eu.ase.ro.livescoringapp.network.HttpManager;
 
 public class SportResultsFragment extends Fragment {
-    // No free API with multiple sports found
+    // No free API with multiple sports found and this API is broken all scores are 0-0
     private static final String FOOTBALL_BUNDESLIGA_RESULTS_URL =
             "https://app.sportdataapi.com/api/v1/soccer/matches?apikey=578921b0-7718-11ed-b28a-a57e51ef3f16&season_id=3194&date_from=2022-12-01";
  private static final String FOOTBALL_PREMIER_LEAGUE_RESULTS_URL =
@@ -75,11 +76,11 @@ public class SportResultsFragment extends Fragment {
         footballLeagueSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i == 0) // bundesliga
+                if(i == 0)
                 {
                     getFootballResultsFromNetwork(FOOTBALL_BUNDESLIGA_RESULTS_URL);
                 }
-                if(i == 1) // premier league
+                if(i == 1)
                 {
                     getFootballResultsFromNetwork(FOOTBALL_PREMIER_LEAGUE_RESULTS_URL);
                 }
@@ -122,7 +123,7 @@ public class SportResultsFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(json);
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
 
-                // we only get 10 results for now
+                // we only get 20 results
                 for (int i = 0; i < 20; i++) {
                     JSONObject currentJsonObject= jsonArray.getJSONObject(i);
 
@@ -136,8 +137,14 @@ public class SportResultsFragment extends Fragment {
 
                     // get home and away score
                     JSONObject scores = currentJsonObject.getJSONObject("stats");
+                    // !! scores are broken in API so generated some random ones
                     Integer homeScore = scores.getInt("home_score");
                     Integer awayScore = scores.getInt("away_score");
+
+                    Random randNum = new Random();
+
+                    homeScore = randNum.nextInt(7);
+                    awayScore = randNum.nextInt(7);
 
                     FootballResult newFootballResult = new FootballResult(homeTeam,awayTeam,homeScore,awayScore);
                     Log.i("API result", newFootballResult.toString() );

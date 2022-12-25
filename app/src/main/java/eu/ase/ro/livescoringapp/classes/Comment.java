@@ -30,7 +30,6 @@ public class Comment implements Parcelable {
     // IMPORTANT: if u have multiple constructors, the one u don't want to be used by ROOM
     // must use @Ignore on it
 
-    // ROOM needs a constructor with all parameters
     @Ignore
     public Comment(String userName, String comment, String sportCategory, long category_id) {
         this.userName = userName;
@@ -39,6 +38,7 @@ public class Comment implements Parcelable {
         this.category_id = category_id;
     }
 
+    // ROOM needs a constructor with all parameters
     public Comment(long id, String userName, String comment, String sportCategory,long category_id) {
         this.id = id;
         this.userName = userName;
@@ -59,6 +59,7 @@ public class Comment implements Parcelable {
         sportCategory = in.readString();
         category_id = in.readLong();
     }
+
     // generated
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
         @Override

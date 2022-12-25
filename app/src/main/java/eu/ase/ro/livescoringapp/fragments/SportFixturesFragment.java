@@ -72,7 +72,7 @@ public class SportFixturesFragment extends Fragment {
         sportSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i == 0) {// football
+                if(i == 0) {
                     getSportEventsFromNetwork(FOOTBALL_URL_KEY);
                 }
                 if(i == 1){
@@ -127,7 +127,7 @@ public class SportFixturesFragment extends Fragment {
     public void getMatchesFromJson(String json,String sportKey) {
         footballMatches.clear();  // remove items before another fetch
         basketballMatches.clear();  // remove items before another fetch
-        // TODO don't fetch if data is already present
+
         if(json != null){
             try {
                 JSONObject jsonObject = new JSONObject(json);
@@ -155,12 +155,4 @@ public class SportFixturesFragment extends Fragment {
             }
         }
     }
-
-//   NOT Needed for now as we just get data from an API
-//    // this is being called to notify the adapter when changes occur
-//    public void notifyAdapter() {
-//        //!! because CommendAdapter inherits from ArrayAdapter there is no problem using it here
-//        RecyclerView.Adapter adapter = recyclerView.getAdapter();
-//        adapter.notifyDataSetChanged();
-//    }
 }
