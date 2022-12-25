@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">LiveScoringApp</string>
     <string name="title_screen_message">Welcome to Live Score</string>
-    <string name="tips_for_a_smooth_experience">Tips for a smooth experience</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="chat_fragment_title">Welcome to chat area</string>
     <string name="add_comment_user_name_hint">user name</string>
     <string name="add_comment_hint">comment</string>
@@ -13,8 +11,7 @@
     <string name="chat_design_category_text">category</string>
     <string name="chat_design_message_text">message</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="text_spinner_select_label">Select sport</string>
+    <string name="text_spinner_select_label">Select league</string>
     <string name="basketball_chat">Basketball chat</string>
     <string name="football_chat">Football chat</string>
     <string name="ball_separator">ball_separator</string>
